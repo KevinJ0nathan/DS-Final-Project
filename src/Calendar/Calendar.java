@@ -13,7 +13,9 @@ import java.util.Date;
 public class Calendar extends JPanel {
     private static final long serialVersionUID = -6333341234494686303L;
 
-    public Calendar(int year,int month, LocalDate selectedDay, JPanel mainPanel){
+    public Calendar(int year,int month, LocalDate selectedDay, JPanel mainPanel, Database database){
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        
         setLayout(new BorderLayout(30, 30));
         setBorder(BorderFactory.createEmptyBorder(40,20,30,20));
         setBackground(Color.WHITE);
@@ -52,11 +54,11 @@ public class Calendar extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 mainPanel.removeAll();
                 if(month!=12) {
-                    mainPanel.add(new Calendar(year, month+1, selectedDay, mainPanel));
+                    mainPanel.add(new Calendar(year, month+1, selectedDay, mainPanel, database));
                 } else {
-                    mainPanel.add(new Calendar(year+1, 1, selectedDay, mainPanel));
+                    mainPanel.add(new Calendar(year+1, 1, selectedDay, mainPanel, database));
                 }
-                mainPanel.add(new Events());
+                mainPanel.add(new Events(selectedDay, database, mainPanel));
                 mainPanel.revalidate();
             }
             @Override
@@ -78,11 +80,11 @@ public class Calendar extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 mainPanel.removeAll();
                 if(month!=1) {
-                    mainPanel.add(new Calendar(year, month-1, selectedDay, mainPanel));
+                    mainPanel.add(new Calendar(year, month-1, selectedDay, mainPanel, database));
                 } else {
-                    mainPanel.add(new Calendar(year-1, 12, selectedDay, mainPanel));
+                    mainPanel.add(new Calendar(year-1, 12, selectedDay, mainPanel, database));
                 }
-                mainPanel.add(new Events());
+                mainPanel.add(new Events(selectedDay, database, mainPanel));
                 mainPanel.revalidate();
             }
             @Override
@@ -128,7 +130,7 @@ public class Calendar extends JPanel {
             DayLabel dayLabel;
             if(selectedDay.getYear()==year && selectedDay.getMonthValue()==month && selectedDay.getDayOfMonth()==i){
                 dayLabel = new DayLabel(i+"",Color.decode("#0ecf78"),Color.black, true);
-            } else if (i%5==0){
+            } else if (database.hasEvent(dateFormatter.format(LocalDate.of(year, month, i)))){
                 dayLabel = new DayLabel(i+"",Color.decode("#00d1e8"),Color.black, true);
             } else{
                 dayLabel = new DayLabel(i+"",Color.decode("#f0f0f0"),Color.black, true);
@@ -138,8 +140,8 @@ public class Calendar extends JPanel {
                 public void mouseClicked(MouseEvent e) {
                     mainPanel.removeAll();
                     LocalDate selectedDay = LocalDate.of(year,month,day);
-                    mainPanel.add(new Calendar(year, month, selectedDay, mainPanel));
-                    mainPanel.add(new Events());
+                    mainPanel.add(new Calendar(year, month, selectedDay, mainPanel, database));
+                    mainPanel.add(new Events(selectedDay, database, mainPanel));
                     mainPanel.revalidate();
                 }
                 @Override

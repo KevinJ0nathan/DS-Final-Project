@@ -18,8 +18,8 @@ public class Event {
         this.dateTime = dateTime;
     }
 
-    public Event(LocalDate date){
-        dateTime = LocalDateTime.of(date, LocalTime.now())
+    public Event(LocalDate date){ // Title ==> null (new Event)
+        dateTime = LocalDateTime.of(date, LocalTime.now());
     }
 
     public Event(){}
