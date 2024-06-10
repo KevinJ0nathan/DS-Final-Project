@@ -1,85 +1,127 @@
 package Calendar;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.io.*;
 import java.util.ArrayList;
 
 public class Database {
-    private String url = "jdbc:mysql://localhost/Calendar";
-    private String user = "user";
-    private String pass = "#1#2#3%1%2%3";
-    private Statement statement;
+    private String filePath = "events.txt";
 
     public Database() {
+        // Initialize the database file if it doesn't exist
+        File file = new File(filePath);
         try {
-            Connection connection = DriverManager.getConnection(url, user, pass);
-            statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-        } catch (SQLException e) {
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public ArrayList<Event> getEvents(String date) {
         ArrayList<Event> events = new ArrayList<>();
-        String select = "SELECT * FROM 'calendar' WHERE 'Date' = '" + date + "';";
-        try {
-            ResultSet rs = statement.executeQuery(select);
-            while (rs.next()) {
-                Event e = new Event();
-                e.setID(rs.getInt("ID"));
-                e.setTitle(rs.getString("Title"));
-                e.setDescription(rs.getString("Description"));
-                e.setDateTimeFromString(rs.getString("Date") + " | " + rs.getString("Time"));
-                events.add(e);
-            } 
-        } catch (SQLException exception) { 
-                exception.printStackTrace();
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                Event e = parseEvent(line);
+                if (e != null && e.getDateToString().equals(date)) {
+                    events.add(e);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return events;
     }
 
     public boolean hasEvent(String date) {
-        boolean hasEvent = false;
-        String select = "SELECT * FROM 'calendar' WHERE 'Date' = '" + date + "';";
-        try {
-            ResultSet rs = statement.executeQuery(select);
-            hasEvent = rs.next();
-        } catch (SQLException exception) { 
-                exception.printStackTrace();
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                Event e = parseEvent(line);
+                if (e != null && e.getDateToString().equals(date)) {
+                    return true;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return hasEvent;
+        return false;
     }
 
     public void createEvent(Event e) {
-        String insert = "INSERT INTO 'calendar' ('Title', 'Description', 'Date', 'Time')" 
-                        + " VALUES ('" + e.getTitle() + "','" + e.getDescription() + "','" + e.getDateToString() + "','" + e.getTimeToString() + "');";
-        try {
-            statement.execute(insert);
-        } catch (SQLException exception) {
-            exception.printStackTrace();
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
+            writer.write(eventToString(e));
+            writer.newLine();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
     public void updateEvent(Event e) {
-        String update = "UPDATE 'calendar' SET 'Title' = '" + e.getTitle() + 
-                        "', 'Description' = '" + e.getDescription() + "', 'Date' = '" + e.getDateToString() + 
-                        "', 'Time' = '" + e.getTimeToString() + "' WHERE 'ID' = " + e.getID();
-        try {
-            statement.execute(update);
-        } catch (SQLException exception) {
-            exception.printStackTrace();
+        ArrayList<Event> events = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                Event currentEvent = parseEvent(line);
+                if (currentEvent != null && currentEvent.getID() == e.getID()) {
+                    events.add(e);
+                } else {
+                    events.add(currentEvent);
+                }
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            for (Event ev : events) {
+                writer.write(eventToString(ev));
+                writer.newLine();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
     public void deleteEvent(int ID) {
-        String delete = "DELETE FROM 'calendar' WHERE 'ID' = " + ID + " ;";
-        try {
-            statement.execute(delete);
-        } catch (SQLException exception) {
-            exception.printStackTrace();
+        ArrayList<Event> events = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                Event currentEvent = parseEvent(line);
+                if (currentEvent != null && currentEvent.getID() != ID) {
+                    events.add(currentEvent);
+                }
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            for (Event ev : events) {
+                writer.write(eventToString(ev));
+                writer.newLine();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private Event parseEvent(String line) {
+        // Example line format: ID|Title|Description|Date|Time
+        String[] parts = line.split("\\|");
+        if (parts.length != 5) return null;
+        Event e = new Event();
+        e.setID(Integer.parseInt(parts[0]));
+        e.setTitle(parts[1]);
+        e.setDescription(parts[2]);
+        e.setDateTimeFromString(parts[3] + " | " + parts[4]);
+        return e;
+    }
+
+    private String eventToString(Event e) {
+        // Convert event to string format: ID|Title|Description|Date|Time
+        return e.getID() + "|" + e.getTitle() + "|" + e.getDescription() + "|" + e.getDateToString() + "|" + e.getTimeToString();
     }
 }
