@@ -13,7 +13,7 @@ import java.util.Date;
 public class Calendar extends JPanel {
     private static final long serialVersionUID = -6333341234494686303L;
 
-    public Calendar(int year,int month, LocalDate selectedDay, JPanel mainPanel, Database database){
+    public Calendar(int year, int month, LocalDate selectedDay, JPanel mainPanel, Database database){
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         
         setLayout(new BorderLayout(30, 30));
