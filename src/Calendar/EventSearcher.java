@@ -1,30 +1,16 @@
 package Calendar;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.awt.Font;
-import javax.swing.JTextField;
 
 public class EventSearcher {
-    public EventSearcher(LocalDate date, Database database, JPanel parent) {
+    public EventSearcher(LocalDate date, Database database, Events eventsPanel) {
 
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        ArrayList<Event> events = database.getEvents(dateFormatter.format(date));
-
-        JFrame frame = new JFrame("Calendar");
+        JFrame frame = new JFrame("Search Events");
         frame.setSize(700, 350);
         frame.setLocationRelativeTo(null);
         frame.getContentPane().setBackground(Color.white);
@@ -57,28 +43,28 @@ public class EventSearcher {
         search.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         bottom.add(search);
 
-        search.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (keyword.getText().equals("")) {
-                    JOptionPane.showMessageDialog(null, "Keyword cannot be empty");
-                    return;
-                }
-                String titleSearch = keyword.getText().toLowerCase();
-                System.out.println("button clicked");
-                for (int i = 0; i < events.size(); i++) {
-                    if (events.get(i).getTitle().toLowerCase().contains(titleSearch)) {
-                        System.out.println(events.get(i).getTitle());
-                    }
-                }
-                parent.revalidate();
-                frame.dispose();
+        search.addActionListener(e -> {
+            String searchText = keyword.getText().toLowerCase();
+            if (searchText.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Keyword cannot be empty");
+                return;
             }
+
+            ArrayList<Event> events = database.getEvents(date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+            ArrayList<Event> filteredEvents = new ArrayList<>();
+            for (Event event : events) {
+                if (event.getTitle().toLowerCase().contains(searchText)) {
+                    filteredEvents.add(event);
+                }
+            }
+
+            eventsPanel.updateEventList(filteredEvents);
+            frame.dispose();
         });
 
         mainPanel.add(bottom, BorderLayout.SOUTH);
 
         frame.getContentPane().add(mainPanel);
-
         frame.setVisible(true);
     }
 }
