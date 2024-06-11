@@ -63,10 +63,10 @@ public class EventSearcher {
                     JOptionPane.showMessageDialog(null, "Keyword cannot be empty");
                     return;
                 }
-                String titleSearch = keyword.getText();
+                String titleSearch = keyword.getText().toLowerCase();
                 System.out.println("button clicked");
                 for (int i = 0; i < events.size(); i++) {
-                    if (events.get(i).getTitle().contains(titleSearch)) {
+                    if (events.get(i).getTitle().toLowerCase().contains(titleSearch)) {
                         System.out.println(events.get(i).getTitle());
                     }
                     return;
