@@ -58,7 +58,7 @@ public class EventSearcher {
         bottom.add(search);
 
         search.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
+            public void actionPerformed(ActionEvent e) {
                 if (keyword.getText().equals("")) {
                     JOptionPane.showMessageDialog(null, "Keyword cannot be empty");
                     return;
@@ -70,7 +70,6 @@ public class EventSearcher {
                         System.out.println(events.get(i).getTitle());
                     }
                 }
-                parent.removeAll();
                 parent.revalidate();
                 frame.dispose();
             }
