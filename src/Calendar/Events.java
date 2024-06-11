@@ -100,5 +100,17 @@ public class Events extends JPanel {
             }
         });
         add(newEvent, BorderLayout.SOUTH);
+
+        JButton searchEvent = new JButton("Search");
+        searchEvent.setFont(new Font("Helvetica", Font.PLAIN, 20));
+        searchEvent.setBackground(Color.decode("#00d1e8"));
+        searchEvent.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        searchEvent.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new EventSearcher(date, database, mainPanel);
+            }
+        });
+        add(searchEvent, BorderLayout.NORTH);
     }
 }
