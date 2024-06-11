@@ -57,7 +57,23 @@ public class EventSearcher {
         search.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         bottom.add(search);
 
+        search.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                if (keyword.getText().equals("")) {
+                    JOptionPane.showMessageDialog(null, "Keyword cannot be empty");
+                    return;
+                }
+                String titleSearch = keyword.getText();
+                System.out.println("button clicked");
+                for (int i = 0; i < events.size(); i++) {
+                    if (events.get(i).getTitle().contains(titleSearch)) {
+                        System.out.println(events.get(i).getTitle());
+                    }
+                    return;
+                }
 
+            }
+        });
 
         mainPanel.add(bottom, BorderLayout.SOUTH);
 
