@@ -69,9 +69,10 @@ public class EventSearcher {
                     if (events.get(i).getTitle().toLowerCase().contains(titleSearch)) {
                         System.out.println(events.get(i).getTitle());
                     }
-                    return;
                 }
-
+                parent.removeAll();
+                parent.revalidate();
+                frame.dispose();
             }
         });
 
