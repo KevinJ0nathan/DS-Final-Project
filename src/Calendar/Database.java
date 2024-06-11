@@ -50,6 +50,7 @@ public class Database {
     }
 
     public void createEvent(Event e) {
+        e.setID(generateUniqueID()); // Set unique ID for the new event
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
             writer.write(eventToString(e));
             writer.newLine();
@@ -123,5 +124,21 @@ public class Database {
     private String eventToString(Event e) {
         // Convert event to string format: ID|Title|Description|Date|Time
         return e.getID() + "|" + e.getTitle() + "|" + e.getDescription() + "|" + e.getDateToString() + "|" + e.getTimeToString();
+    }
+
+    private int generateUniqueID() {
+        int maxID = 0;
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                Event e = parseEvent(line);
+                if (e != null && e.getID() > maxID) {
+                    maxID = e.getID();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return maxID + 1;
     }
 }
