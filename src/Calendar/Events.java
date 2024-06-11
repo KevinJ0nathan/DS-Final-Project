@@ -22,8 +22,15 @@ import java.awt.event.ActionEvent;
 public class Events extends JPanel {
     public Events(LocalDate date, Database database, JPanel mainPanel){
 
+        long startTime, endTime, totalTime;
+
+        // Timing the date formatting and database fetch
+        startTime = System.nanoTime();
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         ArrayList<Event> events = database.getEvents(dateFormatter.format(date));
+        endTime = System.nanoTime();
+        totalTime = endTime - startTime;
+        System.out.println("Time to format date and fetch events: " + totalTime + " ns");
 
         setLayout(new BorderLayout(20, 20));
         setBackground(Color.white);
@@ -37,6 +44,8 @@ public class Events extends JPanel {
 
         JScrollPane sp = new JScrollPane(list);
 
+        // Timing the population of the list with events
+        startTime = System.nanoTime();
         for (int i = 0; i < events.size(); i++) {
             final int j = i;
             JPanel event = new JPanel(new GridLayout(2, 1));
@@ -74,6 +83,9 @@ public class Events extends JPanel {
 
             list.add(event);
         }
+        endTime = System.nanoTime();
+        totalTime = endTime - startTime;
+        System.out.println("Time to populate list with events: " + totalTime + " ns");
 
         add(sp, BorderLayout.CENTER);
 
