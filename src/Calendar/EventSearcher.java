@@ -61,7 +61,7 @@ public class EventSearcher {
             }
             endTime = System.nanoTime();
             totalTime = endTime - startTime;
-            System.out.println((totalTime/1000000) + " ms");
+            System.out.println((totalTime/1000000.0) + " ms");
             
 
             eventsPanel.updateEventList(filteredEvents);
