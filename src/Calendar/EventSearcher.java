@@ -2,14 +2,13 @@ package Calendar;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class EventSearcher {
     public EventSearcher(LocalDate date, Database database, Events eventsPanel) {
-
+        
         JFrame frame = new JFrame("Search Events");
         frame.setSize(700, 350);
         frame.setLocationRelativeTo(null);
@@ -42,26 +41,32 @@ public class EventSearcher {
         search.setBackground(Color.decode("#00d1e8"));
         search.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         bottom.add(search);
-
+        
         search.addActionListener(e -> {
+            long startTime, endTime, totalTime;
+            
             String searchText = keyword.getText().toLowerCase();
             if (searchText.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Keyword cannot be empty");
                 return;
             }
-
+            
             ArrayList<Event> events = database.getEvents(date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
             ArrayList<Event> filteredEvents = new ArrayList<>();
+            startTime = System.nanoTime();
             for (Event event : events) {
                 if (event.getTitle().toLowerCase().contains(searchText)) {
                     filteredEvents.add(event);
                 }
             }
+            endTime = System.nanoTime();
+            totalTime = endTime - startTime;
+            System.out.println((totalTime/1000000) + " ms");
+            
 
             eventsPanel.updateEventList(filteredEvents);
             frame.dispose();
         });
-
         mainPanel.add(bottom, BorderLayout.SOUTH);
 
         frame.getContentPane().add(mainPanel);

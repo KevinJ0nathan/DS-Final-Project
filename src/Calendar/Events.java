@@ -32,7 +32,7 @@ public class Events extends JPanel {
         setBackground(Color.white);
         setBorder(BorderFactory.createEmptyBorder(40, 20, 30, 20));
 
-        list = new JPanel(new GridLayout(Math.max(4, events.size()), 1, 10, 10));
+        list = new JPanel(new GridLayout(events.size() + 2, 1, 10, 10));
         list.setBackground(Color.white);
         JScrollPane sp = new JScrollPane(list);
         populateEventList(events);
@@ -47,14 +47,11 @@ public class Events extends JPanel {
 
     private void populateEventList(ArrayList<Event> events) {
         list.removeAll();
-        long startTime = System.nanoTime();
         for (Event event : events) {
             JPanel eventPanel = createEventPanel(event);
             list.add(eventPanel);
         }
-        long endTime = System.nanoTime();
-        long totalTime = endTime - startTime;
-        System.out.println("Time to populate list with events: " + totalTime + " ns");
+        
         revalidate();
         repaint();
     }
