@@ -45,7 +45,7 @@ public class EventSearcher {
 
         ArrayList<Double> times = new ArrayList<>();
         search.addActionListener(e -> {
-            for (int i = 1; i < 1000; i++) {
+            for (int i = 1; i < 20; i++) {
                 long startTime, endTime, totalTime;
 
                 String searchText = keyword.getText().toLowerCase();

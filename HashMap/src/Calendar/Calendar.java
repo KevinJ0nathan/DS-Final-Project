@@ -1,14 +1,19 @@
 package Calendar;
 
 
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 public class Calendar extends JPanel {
     private static final long serialVersionUID = -6333341234494686303L;
@@ -22,7 +27,7 @@ public class Calendar extends JPanel {
 
         JPanel top = new JPanel(new BorderLayout(10,10));
         top.setBackground(null);
-
+        
         JLabel date = new JLabel(LocalDate.of(year,month, 1).format(DateTimeFormatter.ofPattern("MMMM yyyy")));
         date.setHorizontalAlignment(JLabel.CENTER);
         date.setFont(new Font("Helvetica", Font.BOLD, 30));
@@ -161,5 +166,31 @@ public class Calendar extends JPanel {
         }
 
         add(days,BorderLayout.CENTER);
-    }
+    }}
+    public void addMassData() {
+        String filePath = "events.txt";
+        
+        // Count the number of lines in the file
+        long lineCount = 0;
+        try {
+            lineCount = Files.lines(Paths.get(filePath)).count();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        
+        // If the number of lines is less than this integer, add more lines
+        if (lineCount < 20000) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
+                for (int i = 1; i < 20000; i++) {
+                    String data = i + "|test|test|12-06-2024|12:00";
+                    writer.write(data);
+                    writer.newLine();
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        } else {
+            // Do not execute this method
+            System.out.println("File already has 10000 or more lines. Method will not execute.");
+        }
 }}
