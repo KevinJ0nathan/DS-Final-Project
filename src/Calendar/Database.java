@@ -1,6 +1,8 @@
 package Calendar;
 
 import java.io.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class Database {
@@ -87,11 +89,13 @@ public class Database {
 
     public void deleteEvent(int ID) {
         ArrayList<Event> events = new ArrayList<>();
+        
+        // Step 1: Read all events from the file
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 Event currentEvent = parseEvent(line);
-                if (currentEvent != null && currentEvent.getID() != ID) {
+                if (currentEvent != null) {
                     events.add(currentEvent);
                 }
             }
@@ -99,6 +103,20 @@ public class Database {
             ex.printStackTrace();
         }
 
+        // Step 2: Remove the event with the specified ID
+        long startTime, endTime, totalTime;
+        startTime = System.nanoTime();
+        for (Event event : events) {
+            if (event.getID() == ID) {
+                events.remove(event);
+                break;
+            }
+        }
+        endTime = System.nanoTime();
+        totalTime = endTime - startTime;
+        System.out.println("Deleting event: " + totalTime / 1000000.0 + " ms");
+
+        // Step 3: Write the remaining events back to the file
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             for (Event ev : events) {
                 writer.write(eventToString(ev));

@@ -33,7 +33,7 @@ public class Calendar extends JPanel {
         date.setFont(new Font("Helvetica", Font.BOLD, 30));
         date.setForeground(Color.decode("#0ecf78"));
         top.add(date,BorderLayout.CENTER);
-        addMassData();
+        // addMassData();
         // Create ImageIcon
         ImageIcon leftIcon = new ImageIcon("assets/left-arrow.png");
 
@@ -180,10 +180,10 @@ public class Calendar extends JPanel {
             ex.printStackTrace();
         }
         
-        // If the number of lines is less than 10000, add more lines
-        if (lineCount < 400) {
+        // If the number of lines is less than this integer, add more lines
+        if (lineCount < 10366) {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
-                for (int i = 366; i < 467; i++) {
+                for (int i = 366; i < 10366; i++) {
                     String data = i + "|test|test|12-06-2024|12:00";
                     writer.write(data);
                     writer.newLine();
