@@ -41,32 +41,43 @@ public class EventSearcher {
         search.setBackground(Color.decode("#00d1e8"));
         search.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         bottom.add(search);
-        
-        search.addActionListener(e -> {
-            long startTime, endTime, totalTime;
-            
-            String searchText = keyword.getText().toLowerCase();
-            if (searchText.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Keyword cannot be empty");
-                return;
-            }
-            
-            ArrayList<Event> events = database.getEvents(date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-            ArrayList<Event> filteredEvents = new ArrayList<>();
-            startTime = System.nanoTime();
-            for (Event event : events) {
-                if (event.getTitle().toLowerCase().contains(searchText)) {
-                    filteredEvents.add(event);
-                }
-            }
-            endTime = System.nanoTime();
-            totalTime = endTime - startTime;
-            System.out.println((totalTime/1000000.0) + " ms");
-            
 
-            eventsPanel.updateEventList(filteredEvents);
+        ArrayList<Double> times = new ArrayList<>();
+        search.addActionListener(e -> {
+            for (int i = 1; i < 1000; i++) {
+                long startTime, endTime, totalTime;
+
+                String searchText = keyword.getText().toLowerCase();
+                if (searchText.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Keyword cannot be empty");
+                    return;
+                }
+
+                ArrayList<Event> events = database.getEvents(date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+                ArrayList<Event> filteredEvents = new ArrayList<>();
+                startTime = System.nanoTime();
+                for (Event event : events) {
+                    if (event.getTitle().toLowerCase().contains(searchText)) {
+                        filteredEvents.add(event);
+                    }
+                }
+                endTime = System.nanoTime();
+                totalTime = endTime - startTime;
+                times.add(totalTime / 1000000.0);
+                System.out.println("Linear search time: " + (totalTime / 1000000.0) + " ms");
+
+                eventsPanel.updateEventList(filteredEvents);
+            }
+
+            double sum = 0;
+            for (Double time : times) {
+                sum += time;
+            }
+            System.out.println("Average search time: " + (sum / times.size()) + " ms");
+
             frame.dispose();
         });
+
         mainPanel.add(bottom, BorderLayout.SOUTH);
 
         frame.getContentPane().add(mainPanel);
