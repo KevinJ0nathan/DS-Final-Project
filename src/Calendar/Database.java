@@ -53,9 +53,32 @@ public class Database {
 
     public void createEvent(Event e) {
         e.setID(generateUniqueID()); // Set unique ID for the new event
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
-            writer.write(eventToString(e));
-            writer.newLine();
+        ArrayList<Event> events = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                Event currentEvent = parseEvent(line);
+                if (currentEvent != null) {
+                    events.add(currentEvent);
+                }
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        long startTime, endTime, totalTime;
+        startTime = System.nanoTime();
+        events.add(e);
+        endTime = System.nanoTime();
+        totalTime = endTime - startTime;
+        System.out.println("Adding event: " + totalTime / 1000000.0 + " ms");
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            for (Event ev : events) {
+                writer.write(eventToString(ev));
+                writer.newLine();
+            }
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -63,26 +86,31 @@ public class Database {
 
     public void updateEvent(Event e) {
         ArrayList<Event> events = new ArrayList<>();
+
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
-            long startTime, endTime, totalTime;
-            startTime = System.nanoTime();
             while ((line = reader.readLine()) != null) {
                 Event currentEvent = parseEvent(line);
-                if (currentEvent != null && currentEvent.getID() == e.getID()) {
-                    events.add(e);
-                    endTime = System.nanoTime();
-                    totalTime = endTime - startTime;
-                    System.out.println("Saving existing event: " + totalTime/1000000.0 + " ms");
-                } else {
+                if (currentEvent != null) {
                     events.add(currentEvent);
-                    
                 }
             }
-            
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+
+        long startTime, endTime, totalTime;
+        startTime = System.nanoTime();
+        for (Event event : events) {
+            if (event.getID() == e.getID()) {
+                events.remove(event);
+                events.add(e);
+                break;
+            }
+        }
+        endTime = System.nanoTime();
+        totalTime = endTime - startTime;
+        System.out.println("Updating event: " + totalTime / 1000000.0 + " ms");
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             for (Event ev : events) {

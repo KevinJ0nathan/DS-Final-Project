@@ -188,7 +188,7 @@ public class Calendar extends JPanel {
         }
         
         // If the number of lines is less than this integer, add more lines
-        if (lineCount < 366) {
+        if (lineCount < 1000) {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
                 for (int i = 366; i < 10000; i++) {
                     String data = i + "|test|test|12-06-2024|12:00";
