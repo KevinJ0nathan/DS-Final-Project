@@ -141,7 +141,8 @@ public class Database {
         // Step 2: Remove the event with the specified ID
         long startTime, endTime, totalTime;
         startTime = System.nanoTime();
-        for (Event event : events) {
+        for (int i = events.size() - 1; i > 0; i--) {
+            Event event = events.get(i);
             if (event.getID() == ID) {
                 events.remove(event);
                 break;

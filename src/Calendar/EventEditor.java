@@ -144,12 +144,7 @@ public class EventEditor {
                         JOptionPane.showMessageDialog(null, "Check time format HH:mm");
                         return;
                     }
-                    long startTime, endTime, totalTime;
-                    startTime = System.nanoTime();
                     database.createEvent(e);
-                    endTime = System.nanoTime();
-                    totalTime = endTime - startTime;
-                    System.out.println("Adding new event: " + totalTime/1000000.0 + " ms");
                     // Refreshing main view (calendar & events)
                     parent.removeAll();
                     parent.add(new Calendar(year, month, e.getDate(), parent, database));
