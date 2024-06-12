@@ -175,7 +175,7 @@ public class Calendar extends JPanel {
     }
 
     public void addMassData() {
-        String filePath = "events.txt";
+        String filePath = "eventsLinkedList.txt";
         
         // Count the number of lines in the file
         long lineCount = 0;
@@ -186,9 +186,9 @@ public class Calendar extends JPanel {
         }
         
         // If the number of lines is less than this integer, add more lines
-        if (lineCount < 1000) {
+        if (lineCount < 5001) {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
-                for (int i = 366; i < 10000; i++) {
+                for (int i = 1; i < 5001; i++) {
                     String data = i + "|test|test|12-06-2024|12:00";
                     writer.write(data);
                     writer.newLine();

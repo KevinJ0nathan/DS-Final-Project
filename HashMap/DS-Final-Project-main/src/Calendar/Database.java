@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Database {
-    private String filePath = "events.txt";
+    private String filePath = "eventsHashMap.txt";
 
     public Database() {
         // Initialize the database file if it doesn't exist

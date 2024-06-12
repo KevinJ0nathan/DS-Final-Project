@@ -44,7 +44,7 @@ public class EventSearcher {
 
         ArrayList<Double> times = new ArrayList<>();
         search.addActionListener(e -> {
-            for (int i = 1; i < 100; i++) {
+            for (int i = 1; i < 21; i++) {
                 long startTime, endTime, totalTime;
 
                 String searchText = keyword.getText().toLowerCase();
@@ -64,7 +64,7 @@ public class EventSearcher {
                 endTime = System.nanoTime();
                 totalTime = endTime - startTime;
                 times.add(totalTime / 1000000.0);
-                System.out.println("Linear search time: " + (totalTime / 1000000.0) + " ms");
+                System.out.println(i + ". Linear search time: " + (totalTime / 1000000.0) + " ms");
 
                 eventsPanel.updateEventList(filteredEvents);
             }

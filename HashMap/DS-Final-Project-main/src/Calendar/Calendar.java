@@ -5,6 +5,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
@@ -161,5 +166,32 @@ public class Calendar extends JPanel {
         }
 
         add(days,BorderLayout.CENTER);
+        }
+    }   public void addMassData() {
+        String filePath = "eventsHashMap.txt";
+        
+        // Count the number of lines in the file
+        long lineCount = 0;
+        try {
+            lineCount = Files.lines(Paths.get(filePath)).count();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        
+        // If the number of lines is less than this integer, add more lines
+        if (lineCount < 20001) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
+                for (int i = 1; i < 20001; i++) {
+                    String data = i + "|test|test|12-06-2024|12:00";
+                    writer.write(data);
+                    writer.newLine();
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        } else {
+            // Do not execute this method
+            System.out.println("File already has 10000 or more lines. Method will not execute.");
+        }
     }
-}}
+}

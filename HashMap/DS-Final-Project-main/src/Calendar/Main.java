@@ -6,7 +6,7 @@ import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Calendar");
+        JFrame frame = new JFrame("Calendar-HashMap");
         frame.setSize(900,500);
         frame.setLocationRelativeTo(null);
         frame.getContentPane().setBackground(Color.white);
