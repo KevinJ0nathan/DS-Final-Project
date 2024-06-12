@@ -103,12 +103,8 @@ public class EventEditor {
                         return;
                     }
 
-                    long startTime, endTime, totalTime;
-                    startTime = System.nanoTime();
+                    
                     database.updateEvent(e);
-                    endTime = System.nanoTime();
-                    totalTime = endTime - startTime;
-                    System.out.println("Saving existing event: " + totalTime);
 
                     // Refreshing main view (calendar & events)
                     parent.removeAll();
@@ -153,7 +149,7 @@ public class EventEditor {
                     database.createEvent(e);
                     endTime = System.nanoTime();
                     totalTime = endTime - startTime;
-                    System.out.println("Saving new event: " + totalTime);
+                    System.out.println("Adding new event: " + totalTime/1000000 + " ms");
                     // Refreshing main view (calendar & events)
                     parent.removeAll();
                     parent.add(new Calendar(year, month, e.getDate(), parent, database));

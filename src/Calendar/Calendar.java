@@ -13,6 +13,7 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Calendar extends JPanel {
@@ -33,7 +34,13 @@ public class Calendar extends JPanel {
         date.setFont(new Font("Helvetica", Font.BOLD, 30));
         date.setForeground(Color.decode("#0ecf78"));
         top.add(date,BorderLayout.CENTER);
-        addMassData();
+
+
+
+        // addMassData();
+
+
+
         // Create ImageIcon
         ImageIcon leftIcon = new ImageIcon("assets/left-arrow.png");
 
@@ -181,9 +188,9 @@ public class Calendar extends JPanel {
         }
         
         // If the number of lines is less than this integer, add more lines
-        if (lineCount < 100366) {
+        if (lineCount < 366) {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
-                for (int i = 366; i < 100366; i++) {
+                for (int i = 366; i < 10000; i++) {
                     String data = i + "|test|test|12-06-2024|12:00";
                     writer.write(data);
                     writer.newLine();

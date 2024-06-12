@@ -18,15 +18,8 @@ public class Events extends JPanel {
         this.date = date;
         this.mainPanel = mainPanel;
 
-        long startTime, endTime, totalTime;
-
-        // Timing the date formatting and database fetch
-        startTime = System.nanoTime();
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         ArrayList<Event> events = database.getEvents(dateFormatter.format(date));
-        endTime = System.nanoTime();
-        totalTime = endTime - startTime;
-        System.out.println("Time to format date and fetch events: " + totalTime + " ns");
 
         setLayout(new BorderLayout(20, 20));
         setBackground(Color.white);
