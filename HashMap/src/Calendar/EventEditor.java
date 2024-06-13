@@ -104,7 +104,7 @@ public class EventEditor {
                     }
 
                     // Update event in database
-                    database.createEvent(e);
+                    database.updateEvent(e);
 
                     // Refreshing main view (calendar & events)
                     parent.removeAll();
