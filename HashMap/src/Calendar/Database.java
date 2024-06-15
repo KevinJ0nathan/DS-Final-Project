@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Database {
-    private String filePath = "events.txt";
+    private String filePath = "eventsHash.txt";
 
     public Database() {
         // Initialize the database file if it doesn't exist
@@ -54,14 +54,14 @@ public class Database {
 
     public void createEvent(Event e) {
         e.setID(generateUniqueID()); // Set unique ID for the new event
-        ArrayList<Event> events = new ArrayList<>();
+        HashMap<Integer, Event> events = new HashMap<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 Event currentEvent = parseEvent(line);
                 if (currentEvent != null) {
-                    events.add(currentEvent);
+                    events.put(currentEvent.getID(), currentEvent);
                 }
             }
         } catch (IOException ex) {
@@ -70,13 +70,13 @@ public class Database {
 
         long startTime, endTime, totalTime;
         startTime = System.nanoTime();
-        events.add(e);
+        events.put(e.getID(), e);
         endTime = System.nanoTime();
         totalTime = endTime - startTime;
         System.out.println("Adding event: " + totalTime / 1000000.0 + " ms");
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-            for (Event ev : events) {
+            for (Event ev : events.values()) {
                 writer.write(eventToString(ev));
                 writer.newLine();
             }
@@ -86,34 +86,34 @@ public class Database {
     }
 
     public void updateEvent(Event e) {
-        ArrayList<Event> events = new ArrayList<>();
-
+        HashMap<Integer, Event> events = new HashMap<>();
+    
+        // Step 1: Read all events from the file and store them in the HashMap
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 Event currentEvent = parseEvent(line);
                 if (currentEvent != null) {
-                    events.add(currentEvent);
+                    events.put(currentEvent.getID(), currentEvent);
                 }
             }
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-
+    
+        // Step 2: Update the event with the matching ID
         long startTime, endTime, totalTime;
         startTime = System.nanoTime();
-        for (int i = 0; i < events.size(); i++) {
-            if (events.get(i).getID() == e.getID()) {
-                events.set(i, e);
-                break;
-            }
+        if (events.containsKey(e.getID())) {
+            events.put(e.getID(), e); // Replace the existing event with the new one
         }
         endTime = System.nanoTime();
         totalTime = endTime - startTime;
         System.out.println("Updating event: " + totalTime / 1000000.0 + " ms");
-
+    
+        // Step 3: Write the updated events back to the file
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-            for (Event ev : events) {
+            for (Event ev : events.values()) {
                 writer.write(eventToString(ev));
                 writer.newLine();
             }
@@ -123,14 +123,14 @@ public class Database {
     }
 
     public void deleteEvent(int ID) {
-        ArrayList<Event> events = new ArrayList<>();
+        HashMap<Integer, Event> events = new  HashMap<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 Event currentEvent = parseEvent(line);
                 if (currentEvent != null) {
-                    events.add(currentEvent);
+                    events.put(currentEvent.getID(), currentEvent);
                 }
             }
         } catch (IOException ex) {
@@ -139,13 +139,15 @@ public class Database {
 
         long startTime, endTime, totalTime;
         startTime = System.nanoTime();
-        events.removeIf(event -> event.getID() == ID);
+        if (events.containsKey(ID)) {
+            events.remove(ID);
+        }
         endTime = System.nanoTime();
         totalTime = endTime - startTime;
         System.out.println("Deleting event: " + totalTime / 1000000.0 + " ms");
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-            for (Event ev : events) {
+            for (Event ev : events.values()) {
                 writer.write(eventToString(ev));
                 writer.newLine();
             }
