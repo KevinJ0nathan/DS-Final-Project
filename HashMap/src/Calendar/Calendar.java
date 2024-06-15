@@ -1,19 +1,30 @@
 package Calendar;
 
+import javax.swing.JPanel;
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.ImageIcon;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Image;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 public class Calendar extends JPanel {
     private static final long serialVersionUID = -6333341234494686303L;
@@ -35,7 +46,9 @@ public class Calendar extends JPanel {
         top.add(date,BorderLayout.CENTER);
 
 
+
         // addMassData();
+
 
 
         // Create ImageIcon
@@ -62,7 +75,7 @@ public class Calendar extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 mainPanel.removeAll();
-                if(month!=12) {
+                if (month != 12) {
                     mainPanel.add(new Calendar(year, month+1, selectedDay, mainPanel, database));
                 } else {
                     mainPanel.add(new Calendar(year+1, 1, selectedDay, mainPanel, database));
@@ -88,7 +101,7 @@ public class Calendar extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 mainPanel.removeAll();
-                if(month!=1) {
+                if(month != 1) {
                     mainPanel.add(new Calendar(year, month-1, selectedDay, mainPanel, database));
                 } else {
                     mainPanel.add(new Calendar(year-1, 12, selectedDay, mainPanel, database));
@@ -126,7 +139,7 @@ public class Calendar extends JPanel {
 
         LocalDate firstDay = LocalDate.of(year,month, 1);
 
-        int j = 0;{
+        int j = 0;
         while(!firstDay.getDayOfWeek().toString().equals(weekDays[j])){
             days.add(new DayLabel("",Color.decode("#f0f0f0"),Color.black,false));
             j++;
@@ -134,10 +147,10 @@ public class Calendar extends JPanel {
 
         int daysNum = YearMonth.of(year,month).lengthOfMonth();
 
-        for(int i=1; i<=daysNum; i++){
+        for (int i = 1; i <= daysNum; i++){
             final int day = i;
             DayLabel dayLabel;
-            if(selectedDay.getYear()==year && selectedDay.getMonthValue()==month && selectedDay.getDayOfMonth()==i){
+            if (selectedDay.getYear()==year && selectedDay.getMonthValue()==month && selectedDay.getDayOfMonth()==i){
                 dayLabel = new DayLabel(i+"",Color.decode("#0ecf78"),Color.black, true);
             } else if (database.hasEvent(dateFormatter.format(LocalDate.of(year, month, i)))){
                 dayLabel = new DayLabel(i+"",Color.decode("#00d1e8"),Color.black, true);
@@ -171,7 +184,7 @@ public class Calendar extends JPanel {
 
         add(days,BorderLayout.CENTER);
         }
-    }
+    
     public void addMassData() {
         String filePath = "eventsHash.txt";
         

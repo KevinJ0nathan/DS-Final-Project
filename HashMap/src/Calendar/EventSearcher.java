@@ -56,6 +56,7 @@ public class EventSearcher {
 
                 HashMap<String, Event> events = database.getEvents(date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
                 HashMap<String, Event> filteredEvents = new HashMap<>();
+                System.out.println(events);
                 startTime = System.nanoTime();
                 for (Event event : events.values()) {
                     if (event.getTitle().toLowerCase().contains(searchText)) {
