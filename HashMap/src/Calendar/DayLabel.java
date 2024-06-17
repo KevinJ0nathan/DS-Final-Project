@@ -1,9 +1,14 @@
 package Calendar;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JLabel;
+
+import java.awt.Font;
+import java.awt.Color;
+import java.awt.Cursor;
 
 public class DayLabel extends JLabel {
+
+    // Sets the attributes for the labels of the days
     public DayLabel(String text, Color background, Color foreground, boolean btn){
         setText(text);
         setHorizontalAlignment(JLabel.CENTER);

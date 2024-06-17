@@ -48,14 +48,6 @@ public class Event {
         this.description = description;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
-    }
-
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
-    }
-
     public String getDateTimeToString(){
         return dateTime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy | HH:mm"));
     }
@@ -79,5 +71,4 @@ public class Event {
     public LocalDate getDate(){
         return dateTime.toLocalDate();
     }
-
 }
