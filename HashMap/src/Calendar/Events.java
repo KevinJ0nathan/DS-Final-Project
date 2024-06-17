@@ -71,8 +71,8 @@ public class Events extends JPanel {
     // Method to create the events panel to be able to display each event and its details
     private JPanel createEventPanel(Event event) {
 
-        // First row for title, second for time
-        JPanel eventPanel = new JPanel(new GridLayout(3, 2));
+        // First row for title, second for description, third for time
+        JPanel eventPanel = new JPanel(new GridLayout(3, 1));
         eventPanel.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createEmptyBorder(10, 10, 10, 10),
                 BorderFactory.createMatteBorder(0, 10, 0, 0, Color.decode("#00d1e8"))

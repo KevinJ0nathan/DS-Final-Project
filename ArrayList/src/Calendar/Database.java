@@ -129,8 +129,7 @@ public class Database {
         startTime = System.nanoTime();
 
         // Iterate through the list, remove the event to be modified then add the modified one
-        for (int i = events.size() - 1; i > -1; i--) {
-            Event event = events.get(i);
+        for (Event event : events) {
             if (event.getID() == e.getID()) {
                 events.remove(event);
                 events.add(e);
@@ -174,8 +173,7 @@ public class Database {
         startTime = System.nanoTime();
 
         // Iterate the list and then remove the event with the matching ID
-        for (int i = events.size() - 1; i > -1; i--) {
-            Event event = events.get(i);
+        for (Event event : events) {
             if (event.getID() == ID) {
                 events.remove(event);
                 break;
