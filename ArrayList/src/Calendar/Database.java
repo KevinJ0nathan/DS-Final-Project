@@ -215,7 +215,7 @@ public class Database {
         for (float recordedTime : deleteEventTimes) {
             deleteEventTimesSum += recordedTime;
         }
-        System.out.println("Average time to modify event: " + decimalFormat.format(deleteEventTimesSum / deleteEventIndex));
+        System.out.println("Average time to delete event: " + decimalFormat.format(deleteEventTimesSum / deleteEventIndex));
         deleteEventIndex++;
         deleteEventTimesSum = 0f;
 
