@@ -9,6 +9,7 @@ import java.io.FileWriter;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
 
 import java.util.ArrayList;
 
@@ -66,6 +67,10 @@ public class Database {
         return false;
     }
 
+    ArrayList<Float> createEventTimes = new ArrayList<>();
+    int createEventIndex = 1;
+    DecimalFormat decimalFormat = new DecimalFormat("#.##############");
+
     // Method used to create a new event
     public void createEvent(Event e) {
         e.setID(generateUniqueID()); // Set unique ID for the new event
@@ -94,7 +99,15 @@ public class Database {
 
         endTime = System.nanoTime();
         totalTime = endTime - startTime;
-        System.out.println("Adding event: " + totalTime / 1000000.0 + " ms");
+        createEventTimes.add(totalTime / 1000000f);
+        System.out.println(createEventIndex + ". Adding event: " + decimalFormat.format(totalTime / 1000000f) + " ms");
+        Float createEventTimesSum = 0f;
+        for (float recordedTime : createEventTimes) {
+            createEventTimesSum += recordedTime;
+        }
+        System.out.println("Average time to create event: " + decimalFormat.format(createEventTimesSum / createEventIndex));
+        createEventIndex++;
+        createEventTimesSum = 0f;
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             for (Event ev : events) {
@@ -105,6 +118,9 @@ public class Database {
             ex.printStackTrace();
         }
     }
+
+    ArrayList<Float> updateEventTimes = new ArrayList<>();
+    int updateEventIndex = 1;
 
     // Method used to change the information of a selected event
     public void updateEvent(Event e) {
@@ -138,7 +154,15 @@ public class Database {
         }
         endTime = System.nanoTime();
         totalTime = endTime - startTime;
-        System.out.println("Updating event: " + totalTime / 1000000.0 + " ms");
+        updateEventTimes.add(totalTime / 1000000f);
+        System.out.println(updateEventIndex + ". Updating event: " + decimalFormat.format(totalTime / 1000000f) + " ms");
+        Float updateEventTimesSum = 0f;
+        for (float recordedTime : updateEventTimes) {
+            updateEventTimesSum += recordedTime;
+        }
+        System.out.println("Average time to modify event: " + decimalFormat.format(updateEventTimesSum / updateEventIndex));
+        updateEventIndex++;
+        updateEventTimesSum = 0f;
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             for (Event ev : events) {
@@ -149,6 +173,9 @@ public class Database {
             ex.printStackTrace();
         }
     }
+
+    ArrayList<Float> deleteEventTimes = new ArrayList<>();
+    int deleteEventIndex = 1;
 
     // Method used to delete a selected event
     public void deleteEvent(int ID) {
@@ -182,7 +209,15 @@ public class Database {
 
         endTime = System.nanoTime();
         totalTime = endTime - startTime;
-        System.out.println("Deleting event: " + totalTime / 1000000.0 + " ms");
+        deleteEventTimes.add(totalTime / 1000000f);
+        System.out.println(deleteEventIndex + ". Deleting event: " + decimalFormat.format(totalTime / 1000000f) + " ms");
+        Float deleteEventTimesSum = 0f;
+        for (float recordedTime : deleteEventTimes) {
+            deleteEventTimesSum += recordedTime;
+        }
+        System.out.println("Average time to modify event: " + decimalFormat.format(deleteEventTimesSum / deleteEventIndex));
+        deleteEventIndex++;
+        deleteEventTimesSum = 0f;
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             for (Event ev : events) {
@@ -250,10 +285,10 @@ public class Database {
         // If the number of lines is less than this integer, add the datas
         if (lineCount < 1) {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
-                for (int i = 1; i < 20001; i++) {
+                for (int i = 1; i < 5001; i++) {
 
                     // The date can be anytime
-                    String data = i + "|test|test|12-06-2024|12:00";
+                    String data = i + "|test|test|18-06-2024|12:00";
                     writer.write(data);
                     writer.newLine();
                 }

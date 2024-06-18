@@ -98,7 +98,7 @@ public class EventEditor {
 
         // This checks if the event has a title (used to decide if either an existing event is selected or a new one is to be made)
         if (e.getTitle() != null) { // This is for modifying an event
-            
+
             // Upon opening the event, the information displayed is kept the same
             title.setText(e.getTitle());
             description.setText(e.getDescription());

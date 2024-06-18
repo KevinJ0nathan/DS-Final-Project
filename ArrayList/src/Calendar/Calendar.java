@@ -44,7 +44,7 @@ public class Calendar extends JPanel {
 
 
         // Uncomment the line of code below to add mass data
-        // database.addMassData();
+        database.addMassData();
 
 
 
