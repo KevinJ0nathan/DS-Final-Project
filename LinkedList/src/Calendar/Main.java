@@ -11,7 +11,7 @@ import javax.swing.WindowConstants;
 
 public class Main {
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Calendar-ArrayList");
+        JFrame frame = new JFrame("Calendar-LinkedList");
 
         // Setting the frame
         frame.setSize(900,500);
