@@ -17,6 +17,12 @@ import java.util.ArrayList;
 public class Database {
     private String filePath = "eventsLinkedList.txt";
 
+    /*
+     * Change this number accordingly to test the data structure
+     * Ensure the txt file is empty first
+     */
+    private int EVENTS_TO_ADD = 1000;
+
     // Constructor
     public Database() {
 
@@ -146,13 +152,15 @@ public class Database {
         startTime = System.nanoTime();
 
         // Iterate through the list, remove the event to be modified then add the modified one
-        for (Event event : events) {
+        for (int i = 0; i < events.size(); i++) {
+            Event event = events.get(i);
             if (event.getID() == e.getID()) {
-                events.remove(event);
-                events.add(e);
+                events.remove(i);
+                events.add(i, e);
                 break;
             }
         }
+
         endTime = System.nanoTime();
         totalTime = endTime - startTime;
         updateEventTimes.add(totalTime / 1000000f);
@@ -286,7 +294,7 @@ public class Database {
         // If the number of lines is less than this integer, add the datas
         if (lineCount < 1) {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
-                for (int i = 1; i < 1001; i++) {
+                for (int i = 1; i < EVENTS_TO_ADD + 1; i++) {
 
                     // The date can be anytime
                     String data = i + "|test|test|18-06-2024|12:00";

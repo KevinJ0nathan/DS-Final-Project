@@ -39,12 +39,12 @@ public class Calendar extends JPanel {
         date.setHorizontalAlignment(JLabel.CENTER);
         date.setFont(new Font("Helvetica", Font.BOLD, 30));
         date.setForeground(Color.decode("#0ecf78"));
-        top.add(date,BorderLayout.CENTER);
+        top.add(date, BorderLayout.CENTER);
 
 
 
         // Uncomment the line of code below to add data, used to test data structures
-        // database.addMassData();
+        database.addMassData();
 
 
 

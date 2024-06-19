@@ -33,7 +33,7 @@ public class Events extends JPanel {
 
         // The events are temporarily stored in the hashmap, it is filtered according to the date
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        HashMap<String, Event> events = database.getEvents(dateFormatter.format(date));
+        HashMap<Integer, Event> events = database.getEvents(dateFormatter.format(date));
 
         // Setting the display for the events
         setLayout(new BorderLayout(20, 20));
@@ -57,7 +57,7 @@ public class Events extends JPanel {
     }
 
     // Method to update the list of events
-    public void populateEventList(HashMap<String, Event> events) {
+    public void populateEventList(HashMap<Integer, Event> events) {
         list.removeAll();
         for (Event event : events.values()) {
             JPanel eventPanel = createEventPanel(event);

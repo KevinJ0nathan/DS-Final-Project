@@ -22,6 +22,9 @@ import java.util.HashMap;
 public class EventSearcher {
     public EventSearcher(LocalDate date, Database database, Events eventsPanel) {
 
+        // Number of times the linear search is executed
+        int NUMBER_OF_SEARCHES = 10;
+
         // Sets the frame for the pop-up window
         JFrame frame = new JFrame("Search Events");
         frame.setSize(700, 350);
@@ -65,7 +68,7 @@ public class EventSearcher {
         // List to store the time taken to search a keyword, 50 times
         ArrayList<Double> times = new ArrayList<>();
         search.addActionListener(e -> {
-            for (int i = 1; i < 51; i++) {
+            for (int i = 1; i < NUMBER_OF_SEARCHES + 1; i++) {
                 long startTime, endTime, totalTime;
 
                 String searchText = keyword.getText().toLowerCase();
@@ -74,12 +77,12 @@ public class EventSearcher {
                     return;
                 }
 
-                HashMap<String, Event> events = database.getEvents(date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-                HashMap<String, Event> filteredEvents = new HashMap<>();
+                HashMap<Integer, Event> events = database.getEvents(date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+                HashMap<Integer, Event> filteredEvents = new HashMap<>();
                 startTime = System.nanoTime();
                 for (Event event : events.values()) {
                     if (event.getTitle().toLowerCase().contains(searchText)) {
-                        filteredEvents.put(event.getID() + "", event);
+                        filteredEvents.put(event.getID(), event);
                     }
                 }
                 endTime = System.nanoTime();

@@ -9,11 +9,19 @@ import java.io.FileWriter;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Database {
     private String filePath = "eventsHashMap.txt";
+
+    /*
+     * Change this number accordingly to test the data structure
+     * Ensure the txt file is empty first
+     */
+    private int EVENTS_TO_ADD = 20000;
 
     // Constructor
     public Database() {
@@ -30,8 +38,8 @@ public class Database {
     }
 
     // Method to get the events from the txt file
-    public HashMap<String, Event> getEvents(String date) {
-        HashMap<String, Event> events = new HashMap<>();
+    public HashMap<Integer, Event> getEvents(String date) {
+        HashMap<Integer, Event> events = new HashMap<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
 
@@ -39,7 +47,7 @@ public class Database {
             while ((line = reader.readLine()) != null) {
                 Event e = parseEvent(line);
                 if (e != null && e.getDateToString().equals(date)) {
-                    events.put(e.getID() + "", e); // Using event ID as key
+                    events.put(e.getID(), e); // Using event ID as key
                 }
             }
         } catch (IOException e) {
@@ -65,6 +73,10 @@ public class Database {
         }
         return false;
     }
+
+    ArrayList<Float> createEventTimes = new ArrayList<>();
+    int createEventIndex = 1;
+    DecimalFormat decimalFormat = new DecimalFormat("#.##############");
 
     // Method used to create a new event
     public void createEvent(Event e) {
@@ -94,7 +106,15 @@ public class Database {
 
         endTime = System.nanoTime();
         totalTime = endTime - startTime;
-        System.out.println("Adding event: " + totalTime / 1000000.0 + " ms");
+        createEventTimes.add(totalTime / 1000000f);
+        System.out.println(createEventIndex + ". Adding event: " + decimalFormat.format(totalTime / 1000000f) + " ms");
+        Float createEventTimesSum = 0f;
+        for (float recordedTime : createEventTimes) {
+            createEventTimesSum += recordedTime;
+        }
+        System.out.println("Average time to create event: " + decimalFormat.format(createEventTimesSum / createEventIndex));
+        createEventIndex++;
+        createEventTimesSum = 0f;
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             for (Event ev : events.values()) {
@@ -105,6 +125,9 @@ public class Database {
             ex.printStackTrace();
         }
     }
+
+    ArrayList<Float> updateEventTimes = new ArrayList<>();
+    int updateEventIndex = 1;
 
     // Method used to change the information of a selected event
     public void updateEvent(Event e) {
@@ -135,7 +158,15 @@ public class Database {
 
         endTime = System.nanoTime();
         totalTime = endTime - startTime;
-        System.out.println("Updating event: " + totalTime / 1000000.0 + " ms");
+        updateEventTimes.add(totalTime / 1000000f);
+        System.out.println(updateEventIndex + ". Updating event: " + decimalFormat.format(totalTime / 1000000f) + " ms");
+        Float updateEventTimesSum = 0f;
+        for (float recordedTime : updateEventTimes) {
+            updateEventTimesSum += recordedTime;
+        }
+        System.out.println("Average time to modify event: " + decimalFormat.format(updateEventTimesSum / updateEventIndex));
+        updateEventIndex++;
+        updateEventTimesSum = 0f;
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             for (Event ev : events.values()) {
@@ -146,6 +177,9 @@ public class Database {
             ex.printStackTrace();
         }
     }
+
+    ArrayList<Float> deleteEventTimes = new ArrayList<>();
+    int deleteEventIndex = 1;
 
     // Method used to delete a selected event
     public void deleteEvent(int ID) {
@@ -176,7 +210,15 @@ public class Database {
 
         endTime = System.nanoTime();
         totalTime = endTime - startTime;
-        System.out.println("Deleting event: " + totalTime / 1000000.0 + " ms");
+        deleteEventTimes.add(totalTime / 1000000f);
+        System.out.println(deleteEventIndex + ". Deleting event: " + decimalFormat.format(totalTime / 1000000f) + " ms");
+        Float deleteEventTimesSum = 0f;
+        for (float recordedTime : deleteEventTimes) {
+            deleteEventTimesSum += recordedTime;
+        }
+        System.out.println("Average time to delete event: " + decimalFormat.format(deleteEventTimesSum / deleteEventIndex));
+        deleteEventIndex++;
+        deleteEventTimesSum = 0f;
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             for (Event ev : events.values()) {
@@ -244,10 +286,10 @@ public class Database {
         // If the number of lines is less than this integer, add the datas
         if (lineCount < 1) {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
-                for (int i = 1; i < 20001; i++) {
+                for (int i = 1; i < EVENTS_TO_ADD + 1; i++) {
 
                     // The date can be anytime
-                    String data = i + "|test|test|12-06-2024|12:00";
+                    String data = i + "|test|test|19-06-2024|12:00";
                     writer.write(data);
                     writer.newLine();
                 }
